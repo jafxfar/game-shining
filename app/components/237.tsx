@@ -510,9 +510,8 @@ function Snow2D() {
 }
 
 function TitleScreenMusic() {
-  const [audio] = useState(() => new Audio('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Untitled%20(1)-WBaaqUWM8OrFK7H8xr5UBLzBHG7ibZ.mp3'))
-
   useEffect(() => {
+    const audio = new Audio('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Untitled%20(1)-WBaaqUWM8OrFK7H8xr5UBLzBHG7ibZ.mp3')
     audio.loop = true
     audio.volume = 0.5
     audio.play()
@@ -520,46 +519,65 @@ function TitleScreenMusic() {
       audio.pause()
       audio.currentTime = 0
     }
-  }, [audio])
+  }, [])
 
   return null
 }
 
 function BackgroundMusic({ gameStarted, isGameOver }) {
-  const [audio] = useState(() => new Audio('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Untitled-ooMw6BygICWxfHAwu8ZiR6liNWt0mQ.mp3'))
+  const audioRef = useRef(null)
 
   useEffect(() => {
+    const audio = new Audio('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Untitled-ooMw6BygICWxfHAwu8ZiR6liNWt0mQ.mp3')
+    audio.loop = true
+    audio.volume = 0.5
+    audioRef.current = audio
+    return () => {
+      audio.pause()
+      audio.currentTime = 0
+    }
+  }, [])
+
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+
     if (gameStarted && !isGameOver) {
-      audio.loop = true
-      audio.volume = 0.5
       audio.play()
     } else {
       audio.pause()
       audio.currentTime = 0
     }
-    return () => {
-      audio.pause()
-      audio.currentTime = 0
-    }
-  }, [audio, gameStarted, isGameOver])
+  }, [gameStarted, isGameOver])
 
   return null
 }
 
 function PhantomChaseMusic({ isGameOver }) {
-  const [audio] = useState(() => new Audio('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Phantom%20Chase-NnoKn8Jdxb7NZ5TTrJuA6nYSlxSiGu.mp3'))
+  const audioRef = useRef(null)
 
   useEffect(() => {
-    if (isGameOver) {
-      audio.loop = true
-      audio.volume = 0.5
-      audio.play()
-    }
+    const audio = new Audio('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Phantom%20Chase-NnoKn8Jdxb7NZ5TTrJuA6nYSlxSiGu.mp3')
+    audio.loop = true
+    audio.volume = 0.5
+    audioRef.current = audio
     return () => {
       audio.pause()
       audio.currentTime = 0
     }
-  }, [audio, isGameOver])
+  }, [])
+
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    if (isGameOver) {
+      audio.play()
+    } else {
+      audio.pause()
+      audio.currentTime = 0
+    }
+  }, [isGameOver])
 
   return null
 }
